@@ -1,4 +1,6 @@
 from django.shortcuts import render
+# from django.http import HttpResponse
+from decimal import Decimal
 
 DATA = {
     'omlet': {
@@ -19,22 +21,22 @@ DATA = {
 }
 
 
-def omlet(request):
+def find_dish(request, item):
     if request.GET.get("servings") is None:
         servings = 1
     else:
         servings = int(request.GET.get("servings"))
+
     context = {
-        "omlet": {
-            key: (value * servings) for key, value in DATA['omlet'].items()
+        "recipe": {
+            key: round(value * servings, 1) for key, value in DATA[str(item)].items()
         }
     }
-
     result = render(request, 'calculator/index.html', context)
     return result
 
 
 #для запуска
 #python recipes/manage.py runserver
-#/omlet/5/
+#для запроса
 #/omlet/?servings=5
